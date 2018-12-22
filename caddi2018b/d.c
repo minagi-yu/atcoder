@@ -12,7 +12,7 @@ int main (void)
         if (a % 2 != 0) odd++;
     }
 
-    if (odd % 2 == 0) {
+    if (odd == 0) {
         puts("second");
     } else {
         puts("first");
