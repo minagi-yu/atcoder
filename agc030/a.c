@@ -9,8 +9,6 @@ int main(int argc, char *argv[])
 
     if (C > A + B) {
         ans = A + B + 1;
-    } else if (C > A) {
-        ans = A + 1;
     } else {
         ans = C;
     }
