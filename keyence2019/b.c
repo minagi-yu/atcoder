@@ -55,7 +55,6 @@ int main (void)
         }
     }
 
-    printf("%d %d\n", s, e);
     if (s + e >= 7) {
         puts("YES");
         return 0;
