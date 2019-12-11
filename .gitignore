@@ -6,3 +6,7 @@ Thumbs.db
 
 # object file
 a.out
+
+# vscode
+.vscode/*
+!.vscode/atcoder.code-snippets
