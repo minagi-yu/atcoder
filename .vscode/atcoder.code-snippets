@@ -1,0 +1,194 @@
+{
+	// Place your global snippets here. Each snippet is defined under a snippet name and has a scope, prefix, body and 
+	// description. Add comma separated ids of the languages where the snippet is applicable in the scope field. If scope 
+	// is left empty or omitted, the snippet gets applied to all languages. The prefix is what is 
+	// used to trigger the snippet and the body will be expanded and inserted. Possible variables are: 
+	// $1, $2 for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders. 
+	// Placeholders with the same ids are connected.
+	// Example:
+	// "Print to console": {
+	// 	"scope": "javascript,typescript",
+	// 	"prefix": "log",
+	// 	"body": [
+	// 		"console.log('$1');",
+	// 		"$2"
+	// 	],
+	// 	"description": "Log output to console"
+	// }
+	"omajinai": {
+		"scope": "c",
+		"prefix": "omajinai",
+		"body": [
+			"#include <stdio.h>",
+			"#include <stdlib.h>",
+			"#include <stdint.h>",
+			"#include <inttypes.h>",
+			"#include <string.h>",
+			"#include <math.h>",
+			"",
+			"int main (void)",
+			"{",
+			"\tintmax_t ${1:N};",
+			"\tintmax_t ans = 0;",
+			"",
+			"\tscanf(\"%jd\"$2, &${3:N});",
+			"",
+			"\t$4",
+			"",
+			"\tprintf(\"%jd\\n\", ans);",
+			"",
+			"\treturn 0;",
+			"}",
+			"",
+		],
+		"description": "おまじない"
+	},
+
+	"define min function": {
+		"scope": "c",
+		"prefix": "defmin",
+		"body": [
+			"#define min(a, b) _generic((a), \\",
+			"\tint64_t: minll \\",
+			"\tlong double: minLf \\",
+			"\tdefault: minll \\",
+			"\t) (a, b)",
+			"",
+			"int64_t minll (int64_t x, int64_t y)",
+			"{",
+			"\treturn a < b ? a : b",
+			"}",
+			"",
+			"long double minLf (long double x, long double y)",
+			"{",
+			"\treturn a < b ? a : b",
+			"}",
+		],
+		"description": "小さい方を求める関数定義"
+	},
+
+	"define max function": {
+		"scope": "c",
+		"prefix": "defmax",
+		"body": [
+			"#define max(a, b) _generic((a), \\",
+			"\tint64_t: maxll \\",
+			"\tlong double: maxLf \\",
+			"\tdefault: maxll \\",
+			"\t) (a, b)",
+			"",
+			"int64_t maxll (int64_t x, int64_t y)",
+			"{",
+			"\treturn a > b ? a : b",
+			"}",
+			"",
+			"long double maxLf (long double x, long double y)",
+			"{",
+			"\treturn a > b ? a : b",
+			"}",
+		],
+		"description": "小さい方を求める関数定義"
+	},
+	
+	"qsort": {
+		"scope": "c",
+		"prefix": "qsort",
+		"body" : [
+			"qsort(${1:array}, ${2:N}, sizeof($3), ${4:compare});"
+		],
+		"description": "クイックソート"
+	},
+
+	"compare int64_t asc": {
+		"scope": "c",
+		"prefix": "compll",
+		"body": [
+			"int ${1:compare} (const void *a, const void *b)",
+			"{",
+			"\tif(*(int64_t *)a - *(int64_t *)b < 0)",
+			"\t\treturn -1;",
+			"\tif(*(int64_t *)a - *(int64_t *)b > 0)",
+			"\t\treturn 1;",
+			"\treturn 0;",
+			"}"
+		],
+		"description": "int64_tの比較関数（小さい方から順に）"
+	},
+
+	"compare struct asc": {
+		"scope": "c",
+		"prefix": "compstr",
+		"body": [
+			"int ${1:compare} (const void *a, const void *b)",
+			"{",
+			"\tif(((${2:hoge_t} *)a)->$3 - (($2 *)b)->$3 < 0)",
+			"\t\treturn -1;",
+			"\tif((($2 *)a)->$3 - (($2 *)b)->$3 > 0)",
+			"\t\treturn 1;",
+			"\treturn 0;",
+			"}",
+		],
+		"description": "構造体メンバーの比較関数（小さい方から順に）"
+	},
+
+	"compare int64_t desc": {
+		"scope": "c",
+		"prefix": "compll",
+		"body": [
+			"int ${1:compare} (const void *a, const void *b)",
+			"{",
+			"\tif(*(int64_t *)a - *(int64_t *)b < 0)",
+			"\t\treturn 1;",
+			"\tif(*(int64_t *)a - *(int64_t *)b > 0)",
+			"\t\treturn -1;",
+			"\treturn 0;",
+			"}"
+		],
+		"description": "int64_tの比較関数（大きい方から順に）"
+	},
+
+	"compare struct desc": {
+		"scope": "c",
+		"prefix": "compstr",
+		"body": [
+			"int ${1:compare} (const void *a, const void *b)",
+			"{",
+			"\tif(((${2:hoge_t} *)a)->$3 - (($2 *)b)->$3 < 0)",
+			"\t\treturn 1;",
+			"\tif((($2 *)a)->$3 - (($2 *)b)->$3 > 0)",
+			"\t\treturn -1;",
+			"\treturn 0;",
+			"}",
+		],
+		"description": "構造体メンバーの比較関数（大きい方から順に）"
+	},
+
+	"define gcd lcm function": {
+		"scope": "c",
+		"prefix": ["gcd", "lcm"],
+		"body": [
+			"uint64_t get_gcd (uint64_t a, uint64_t b)",
+			"{",
+			"\tif (b == 0) return a;",
+			"\telse return get_gcd(b, a % b);",
+			"}",
+			"",
+			"uint64_t get_lcm (uint64_t a, uint64_t b)",
+			"{",
+			"\tuint64_t g = get_gcd(a, b);",
+			"\treturn a / g * b;",
+			"}",
+			""
+		],
+		"description": "最大公約数と最小公倍数"
+	},
+
+	"debug printf": {
+		"scope": "c",
+		"prefix": "debug",
+		"body": [
+			"fprintf(stderr, $1);"
+		],
+		"description": "標準エラー出力にprint"
+	},
+}
