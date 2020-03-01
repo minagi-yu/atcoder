@@ -19,170 +19,249 @@
 		"scope": "c",
 		"prefix": "omajinai",
 		"body": [
+			"#include <inttypes.h>",
+			"#include <math.h>",
+			"#include <stdbool.h>",
+			"#include <stdint.h>",
 			"#include <stdio.h>",
 			"#include <stdlib.h>",
-			"#include <stdint.h>",
-			"#include <inttypes.h>",
 			"#include <string.h>",
-			"#include <math.h>",
 			"",
 			"int main (void)",
 			"{",
-			"\tintmax_t ${1:N};",
-			"\tintmax_t ans = 0;",
+			"    intmax_t ${1:N};",
+			"    intmax_t ans = 0;",
 			"",
-			"\tscanf(\"%jd\"$2, &${3:N});",
+			"    scanf(\"%jd$2\", &${3:N});",
 			"",
-			"\t$4",
+			"    $4",
 			"",
-			"\tprintf(\"%jd\\n\", ans);",
+			"    printf(\"%jd\\n\", ans);",
 			"",
-			"\treturn 0;",
+			"    return 0;",
 			"}",
 			"",
 		],
 		"description": "おまじない"
 	},
-
+	"rep": {
+		"scope": "c",
+		"prefix": [
+			"rep"
+		],
+		"body": [
+			"for (size_t ${1:i} = 0; $1 < ${2:N}; $1++) {",
+			"    $3",
+			"}"
+		],
+		"description": "ループ"
+	},
 	"define min function": {
 		"scope": "c",
-		"prefix": "defmin",
+		"prefix": "min",
 		"body": [
 			"#define min(a, b) _generic((a), \\",
-			"\tint64_t: minll \\",
-			"\tlong double: minLf \\",
-			"\tdefault: minll \\",
-			"\t) (a, b)",
+			"    intmax_t: minj \\",
+			"    long double: minlf \\",
+			"    default: minj \\",
+			"    ) (a, b)",
 			"",
-			"int64_t minll (int64_t x, int64_t y)",
+			"intmax_t minj (intmax_t x, intmax_t y)",
 			"{",
-			"\treturn a < b ? a : b",
+			"    return a < b ? a : b",
 			"}",
 			"",
-			"long double minLf (long double x, long double y)",
+			"long double minlf (long double x, long double y)",
 			"{",
-			"\treturn a < b ? a : b",
+			"    return a < b ? a : b",
 			"}",
 		],
 		"description": "小さい方を求める関数定義"
 	},
-
 	"define max function": {
 		"scope": "c",
-		"prefix": "defmax",
+		"prefix": "max",
 		"body": [
 			"#define max(a, b) _generic((a), \\",
-			"\tint64_t: maxll \\",
-			"\tlong double: maxLf \\",
-			"\tdefault: maxll \\",
-			"\t) (a, b)",
+			"    intmax_t: maxj \\",
+			"    long double: maxlf \\",
+			"    default: maxj \\",
+			"    ) (a, b)",
 			"",
-			"int64_t maxll (int64_t x, int64_t y)",
+			"intmax_t maxj (intmax_t x, intmax_t y)",
 			"{",
-			"\treturn a > b ? a : b",
+			"    return a > b ? a : b",
 			"}",
 			"",
-			"long double maxLf (long double x, long double y)",
+			"long double maxlf (long double x, long double y)",
 			"{",
-			"\treturn a > b ? a : b",
+			"    return a > b ? a : b",
 			"}",
 		],
-		"description": "小さい方を求める関数定義"
+		"description": "大きい方を求める関数定義"
 	},
-	
 	"qsort": {
 		"scope": "c",
 		"prefix": "qsort",
-		"body" : [
-			"qsort(${1:array}, ${2:N}, sizeof($3), ${4:compare});"
+		"body": [
+			"qsort(${1:array}, ${2:N}, sizeof($1[0]), ${4:compare});"
 		],
 		"description": "クイックソート"
 	},
-
-	"compare int64_t asc": {
+	"compare intmax_t asc": {
 		"scope": "c",
-		"prefix": "compll",
+		"prefix": "compj",
 		"body": [
 			"int ${1:compare} (const void *a, const void *b)",
 			"{",
-			"\tif(*(int64_t *)a - *(int64_t *)b < 0)",
-			"\t\treturn -1;",
-			"\tif(*(int64_t *)a - *(int64_t *)b > 0)",
-			"\t\treturn 1;",
-			"\treturn 0;",
+			"    if(*(intmax_t *)a < *(intmax_t *)b)",
+			"        return -1;",
+			"    if(*(intmax_t *)a > *(intmax_t *)b)",
+			"        return 1;",
+			"    return 0;",
 			"}"
 		],
-		"description": "int64_tの比較関数（小さい方から順に）"
+		"description": "intmax_tの比較関数（小さい方から順に）"
 	},
-
 	"compare struct asc": {
 		"scope": "c",
 		"prefix": "compstr",
 		"body": [
 			"int ${1:compare} (const void *a, const void *b)",
 			"{",
-			"\tif(((${2:hoge_t} *)a)->$3 - (($2 *)b)->$3 < 0)",
-			"\t\treturn -1;",
-			"\tif((($2 *)a)->$3 - (($2 *)b)->$3 > 0)",
-			"\t\treturn 1;",
-			"\treturn 0;",
+			"    if(((${2:hoge_t} *)a)->$3 < (($2 *)b)->$3)",
+			"        return -1;",
+			"    if((($2 *)a)->$3 > (($2 *)b)->$3)",
+			"        return 1;",
+			"    return 0;",
 			"}",
 		],
 		"description": "構造体メンバーの比較関数（小さい方から順に）"
 	},
-
-	"compare int64_t desc": {
+	"compare intmax_t desc": {
 		"scope": "c",
-		"prefix": "compll",
+		"prefix": "compj",
 		"body": [
 			"int ${1:compare} (const void *a, const void *b)",
 			"{",
-			"\tif(*(int64_t *)a - *(int64_t *)b < 0)",
-			"\t\treturn 1;",
-			"\tif(*(int64_t *)a - *(int64_t *)b > 0)",
-			"\t\treturn -1;",
-			"\treturn 0;",
+			"    if(*(intmax_t *)a < *(intmax_t *)b)",
+			"        return 1;",
+			"    if(*(intmax_t *)a > *(intmax_t *)b)",
+			"        return -1;",
+			"    return 0;",
 			"}"
 		],
-		"description": "int64_tの比較関数（大きい方から順に）"
+		"description": "intmax_tの比較関数（大きい方から順に）"
 	},
-
 	"compare struct desc": {
 		"scope": "c",
 		"prefix": "compstr",
 		"body": [
 			"int ${1:compare} (const void *a, const void *b)",
 			"{",
-			"\tif(((${2:hoge_t} *)a)->$3 - (($2 *)b)->$3 < 0)",
-			"\t\treturn 1;",
-			"\tif((($2 *)a)->$3 - (($2 *)b)->$3 > 0)",
-			"\t\treturn -1;",
-			"\treturn 0;",
+			"    if(((${2:hoge_t} *)a)->$3 < (($2 *)b)->$3)",
+			"        return 1;",
+			"    if((($2 *)a)->$3 > (($2 *)b)->$3)",
+			"        return -1;",
+			"    return 0;",
 			"}",
 		],
 		"description": "構造体メンバーの比較関数（大きい方から順に）"
 	},
-
-	"define gcd lcm function": {
+	"gcd": {
 		"scope": "c",
-		"prefix": ["gcd", "lcm"],
+		"prefix": [
+			"gcd"
+		],
 		"body": [
-			"uint64_t get_gcd (uint64_t a, uint64_t b)",
+			"intmax_t gcd(intmax_t a, intmax_t b)",
 			"{",
-			"\tif (b == 0) return a;",
-			"\telse return get_gcd(b, a % b);",
+			"    while (b != 0) {",
+			"        intmax_t r = a % b;",
+			"        a = b;",
+			"        b = r;",
+			"    }",
+			"    return a;",
+			"}"
+		],
+		"description": "最大公約数"
+	},
+	"lcm": {
+		"scope": "c",
+		"prefix": [
+			"lcm"
+		],
+		"body": [
+			"intmax_t lcm(intmax_t a, intmax_t b)",
+			"{",
+			"    intmax_t g = a, b_ = b;",
+			"    while (b_ != 0) {",
+			"        intmax_t r = g % b_;",
+			"        g = b_;",
+			"        b_ = r;",
+			"    }",
+			"    return a / g * b;",
+			"}"
+		],
+		"description": "最小公倍数"
+	},
+	"next_permutation": {
+		"scope": "c",
+		"prefix": "permutation",
+		"body": [
+			"void swap(void *src, void *dst, size_t size)",
+			"{",
+			"    char tmp;",
+			"    char *sp = (char *)src;",
+			"    char *dp = (char *)dst;",
+			"",
+			"    do {",
+			"        tmp = *sp;",
+			"        *sp++ = *dp;",
+			"        *dp++ = tmp;",
+			"    } while (--size);",
 			"}",
 			"",
-			"uint64_t get_lcm (uint64_t a, uint64_t b)",
+			"void reverse(void *base, size_t nmemb, size_t size)",
 			"{",
-			"\tuint64_t g = get_gcd(a, b);",
-			"\treturn a / g * b;",
+			"    char *first = (char *)base;",
+			"    char *last = (char *)base + (nmemb - 1) * size;",
+			"",
+			"    if (nmemb == 0)",
+			"        return;",
+			"",
+			"    for (; first < last; first += size, last -= size) {",
+			"        swap(first, last, size);",
+			"    }",
+			"}",
+			"",
+			"_Bool next_permutation(void *base, size_t nmemb, size_t size, int (*compar)(const void *, const void *))",
+			"{",
+			"    char *first = (char *)base;",
+			"    char *last = (char *)base + (nmemb - 1) * size;",
+			"    char *i = last;",
+			"",
+			"    for (;;) {",
+			"        i -= size;",
+			"        if (compar(i, i + size) < 0) {",
+			"            char *j = last;",
+			"            while (compar(i, j) >= 0) {",
+			"                j -= size;",
+			"            }",
+			"            swap(i, j, size);",
+			"            reverse(i + size, (last - i) / size, size);",
+			"            return 1;",
+			"        }",
+			"        if (i == first) {",
+			"            reverse(base, nmemb, size);",
+			"            return 0;",
+			"        }",
+			"    }",
 			"}",
 			""
 		],
-		"description": "最大公約数と最小公倍数"
+		"description": "次の順列を求める"
 	},
-
 	"debug printf": {
 		"scope": "c",
 		"prefix": "debug",
